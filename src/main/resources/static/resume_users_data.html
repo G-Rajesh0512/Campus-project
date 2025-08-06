@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus1 - Resume Users Data</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(90deg, #6b46c1, #4c51bf);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 20%;
+            width: 80%;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            height: 60px;
+        }
+        .header .logo {
+            display: flex;
+            align-items: center;
+        }
+        .header .logo i {
+            font-size: 28px;
+            margin-right: 12px;
+            color: #60a5fa;
+        }
+        .header .logo span {
+            font-size: 28px;
+            font-weight: bold;
+            color: #f472b6;
+        }
+        .header .date-time {
+            background-color: #34d399;
+            padding: 8px 15px;
+            border-radius: 18px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            font-weight: 500;
+        }
+        .header .date-time i {
+            margin-right: 5px;
+        }
+        .sidebar {
+            width: 20%;
+            background: linear-gradient(180deg, #3b82f6, #2563eb);
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            padding-top: 25px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+            z-index: 900;
+        }
+        .sidebar h2 {
+            font-size: 22px;
+            font-weight: 700;
+            text-align: center;
+            margin: 0 0 30px 0;
+            padding: 0 20px;
+            color: #f1f5f9;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+        }
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            color: white;
+            padding: 16px 25px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            margin: 2px 0;
+        }
+        .sidebar a i {
+            margin-right: 15px;
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .sidebar a:hover {
+            background: linear-gradient(90deg, #1e40af, #2563eb);
+            border-left: 4px solid #60a5fa;
+            padding-left: 30px;
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+        .sidebar a:hover i {
+            transform: scale(1.2);
+            color: #60a5fa;
+        }
+        .sidebar a:active {
+            background: linear-gradient(90deg, #1e3a8a, #1e40af);
+            transform: translateX(2px);
+        }
+        .main-content {
+            margin-left: 20%;
+            padding: 90px 30px 30px;
+            background-color: #f5f7fa;
+        }
+        .notification {
+            display: none;
+            background-color: #34d399;
+            color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .notification.show {
+            display: block;
+            opacity: 1;
+        }
+        .view-buttons {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+        .view-button {
+            padding: 30px 50px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .view-button.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .view-button:not(.active) {
+            background-color: #e5e7eb;
+            color: #4b5563;
+        }
+        .view-button:not(.active):hover {
+            background-color: #d1d5db;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-left: 5px solid #10b981;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        th {
+            background-color: #3b82f6;
+            color: white;
+        }
+        td a, td button {
+            margin-right: 10px;
+            color: #1e3a8a;
+            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        td a:hover, td button:hover {
+            color: #2563eb;
+        }
+        .user-details, .status-details {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            margin: 0;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .status-group {
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .status-group.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .status-group label {
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-right: 10px;
+        }
+        .status-group select {
+            padding: 10px;
+            width: 220px;
+            border: 2px solid #93c5fd;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            transition: border-color 0.3s;
+        }
+        .status-group select:focus {
+            border-color: #3b82f6;
+            outline: none;
+        }
+        .status-group select:disabled {
+            background-color: #e5e7eb;
+            cursor: not-allowed;
+        }
+        .contact-options {
+            display: none;
+            margin-top: 10px;
+        }
+        .contact-options a {
+            margin-right: 15px;
+            color: #1e3a8a;
+            font-size: 24px;
+            transition: color 0.3s, transform 0.3s;
+        }
+        .contact-options a:hover {
+            color: #2563eb;
+            transform: scale(1.2);
+        }
+        .save-button, .complete-button, .reopen-button {
+            background: linear-gradient(90deg, #6b46c1, #9333ea);
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-right: 10px;
+        }
+        .save-button:hover, .complete-button:hover, .reopen-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        td button.status-btn {
+            background-color: #3b82f6;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+        td button.status-btn:hover {
+            background-color: #2563eb;
+        }
+        .status-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .status-header a {
+            margin-left: 15px;
+            color: #1e3a8a;
+            font-size: 40px;
+            transition: color 0.3s, transform 0.3s;
+        }
+        .status-header a:hover {
+            color: #2563eb;
+            transform: scale(1.2);
+        }
+        tr {
+            touch-action: manipulation;
+        }
+        .hidden {
+            display: none;
+        }
+        .status-display {
+            margin-top: 20px;
+        }
+        .status-display h4 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+        .status-display p {
+            margin: 5px 0;
+        }
+        .schedule-button {
+            background-color: #34d399;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .schedule-button:hover {
+            background-color: #2aa36d;
+        }
+        .schedule-button.disabled {
+            background-color: #3b82f6;
+            cursor: not-allowed;
+        }
+        .schedule-form {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+        .schedule-form input, .schedule-form button {
+            margin: 5px 0;
+            padding: 8px;
+            border: 1px solid #93c5fd;
+            border-radius: 4px;
+        }
+        .schedule-form button {
+            background-color: #3b82f6;
+            color: white;
+            cursor: pointer;
+        }
+        .schedule-form button:hover {
+            background-color: #2563eb;
+        }
+    </style>
+    <script src="common.js"></script>
+</head>
+<body>
+
+    <div class="main-content">
+        <div id="notification" class="notification"></div>
+        <h3>Resume Users Data</h3>
+        <div class="view-buttons">
+            <button class="view-button active" onclick="showView('assigned')">ASSIGNED</button>
+            <button class="view-button" onclick="showView('completed')">FILE CLOSED</button>
+        </div>
+        
+        <!-- Assigned Users Table -->
+        <div id="assigned-view">
+            <table id="assigned-table">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Resumes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr onclick="toggleDetails(this, 'assigned', event)" ontouchstart="toggleDetails(this, 'assigned', event)">
+                        <td>001</td>
+                        <td>Kishore Kumar</td>
+                        <td>kishorekumar@example.com</td>
+                        <td>2</td>
+                        <td>
+                            <a href="#" onclick="event.stopPropagation()">Delete</a>
+                            <button class="status-btn" onclick="toggleStatus(this)">Status</button>
+                        </td>
+                    </tr>
+                    <tr class="user-details" id="userDetails001">
+                        <td colspan="5" onclick="toggleDetails(this.parentElement, 'assigned', event)" ontouchstart="toggleDetails(this.parentElement, 'assigned', event)">
+                            <h3>User Details - Kishore Kumar</h3>
+                            <div>
+                                <h4>Personal Details</h4>
+                                <p>Full Name: Kishore Kumar</p>
+                                <p>Email: kishore.kumar@example.com</p>
+                                <p>Date of Birth: 1995-05-15</p>
+                                <p>Phone Number: +91-555-123-4567</p>
+                                <p>Address: 123 Main St, New York, NY 10001, USA</p>
+                                <p>Father's Name: Anand</p>
+                                <p>Mother's Name: Supraja</p>
+                                <p>LinkedIn URL: linkedin.com/in/kishorekumar</p>
+                                <p>GitHub URL: github.com/kishorekumar</p>
+                                <p>Portfolio URL: kishorekumarportfolio.com</p>
+                                <p>Professional Objective: Seeking a challenging role to utilize my skills in software development and contribute to innovative projects.</p>
+                            </div>
+                            <div>
+                                <h4>Education</h4>
+                                <p>B.Sc. in Computer Science, XYZ University, 2013-2017</p>
+                                <h4>Skills</h4>
+                                <p>Python, JavaScript, SQL, Problem Solving</p>
+                                <h4>Work Experience</h4>
+                                <p>Software Developer, ABC Corp, 2017-2020</p>
+                                <h4>Projects</h4>
+                                <p>Personal Blog Website, E-Commerce Platform</p>
+                                <h4>Certifications</h4>
+                                <p>AWS Certified Developer, Google Cloud Associate</p>
+                                <h4>Achievements</h4>
+                                <p>Best Employee Award 2019, Hackathon Winner 2018</p>
+                                <h4>Languages</h4>
+                                <p>English (Fluent), Spanish (Intermediate)</p>
+                                <h4>Hobbies</h4>
+                                <p>Photography, Hiking</p>
+                                <h4>References</h4>
+                                <p>Jane Smith, Manager at ABC Corp, jane.smith@abccorp.com</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="user-details status-section" id="statusDetails001" style="display:none;">
+                        <td colspan="5">
+                            <div class="status-header">
+                                <h3>Candidate Evaluation Status - Kishore Kumar</h3>
+                                <a href="#" onclick="sendEmail('001')" title="Send Email"><i class="fas fa-envelope"></i></a>
+                                <a href="#" onclick="sendWhatsApp('001')" title="Send WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                                <a href="#" onclick="makePhoneCall('001')" title="Make Phone Call"><i class="fas fa-phone"></i></a>
+                            </div>
+                            <div class="status-group" id="callingStatus001">
+                                <label>Calling Status:</label>
+                                <select onchange="handleStatusChange('callingStatus001', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Answered">Answered</option>
+                                    <option value="Answered-Busy">Answered-Busy</option>
+                                    <option value="Not Answered">Not Answered</option>
+                                    <option value="Not Connected">Not Connected</option>
+                                    <option value="Wrong Number">Wrong Number</option>
+                                </select>
+                                <div class="contact-options" id="contactOptions001">
+                                    <a href="#" onclick="sendEmail('001')" title="Send Email"><i class="fas fa-envelope"></i></a>
+                                    <a href="#" onclick="sendWhatsApp('001')" title="Send WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                                    <a href="#" onclick="makePhoneCall('001')" title="Make Phone Call"><i class="fas fa-phone"></i></a>
+                                </div>
+                            </div>
+                            <div class="status-group" id="jobStatus001">
+                                <label>Looking for Job:</label>
+                                <select onchange="handleStatusChange('jobStatus001', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Looking for Job">Looking for Job</option>
+                                    <option value="Not Looking for Job">Not Looking for Job</option>
+                                </select>
+                            </div>
+                            <div class="status-group" id="eligibilityStatus001">
+                                <label>Eligibility:</label>
+                                <select onchange="handleStatusChange('eligibilityStatus001', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Eligible for client">Eligible for client</option>
+                                    <option value="Not Eligible Client">Not Eligible Client</option>
+                                </select>
+                            </div>
+                            <div class="status-group" id="clientStatus001">
+                                <label>Client:</label>
+                                <select onchange="handleStatusChange('clientStatus001', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Wipro">Wipro</option>
+                                    <option value="Tech Mahindra">Tech Mahindra</option>
+                                    <option value="Sutherland">Sutherland</option>
+                                    <option value="Tele performance">Tele performance</option>
+                                    <option value="Digitide">Digitide</option>
+                                </select>
+                            </div>
+                            <div class="status-group" id="telephonicStatus001">
+                                <button class="schedule-button" id="telephonicButton001" onclick="toggleScheduleForm('telephonicForm001')">Telephonic Interview</button>
+                                <select onchange="handleStatusChange('telephonicStatus001', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Select">Select</option>
+                                    <option value="Reject">Reject</option>
+                                    <option value="recruiter Pending">recruiter Pending</option>
+                                </select>
+                                <div class="schedule-form" id="telephonicForm001">
+                                    <input type="date" id="telephonicDate001" required>
+                                    <input type="time" id="telephonicTime001" required>
+                                    <button onclick="scheduleInterview('001', 'Telephonic Interview', 'telephonicDate001', 'telephonicTime001')">Send Invite</button>
+                                </div>
+                            </div>
+                            <div class="status-group" id="hrStatus001">
+                                <button class="schedule-button" id="hrButton001" onclick="toggleScheduleForm('hrForm001')">HR Interview</button>
+                                <select onchange="handleStatusChange('hrStatus001', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Select">Select</option>
+                                    <option value="Reject">Reject</option>
+                                    <option value="hr Pending">hr Pending</option>
+                                </select>
+                                <div class="schedule-form" id="hrForm001">
+                                    <input type="date" id="hrDate001" required>
+                                    <input type="time" id="hrTime001" required>
+                                    <button onclick="scheduleInterview('001', 'HR Interview', 'hrDate001', 'hrTime001')">Send Invite</button>
+                                </div>
+                            </div>
+                            <div class="status-group" id="opsStatus001">
+                                <button class="schedule-button" id="opsButton001" onclick="toggleScheduleForm('opsForm001')">Operation Round</button>
+                                <select onchange="handleStatusChange('opsStatus001', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Select">Select</option>
+                                    <option value="Reject">Reject</option>
+                                    <option value="ops Pending">ops Pending</option>
+                                    <option value="ops 2nd Chance">ops 2nd Chance</option>
+                                </select>
+                                <div class="schedule-form" id="opsForm001">
+                                    <input type="date" id="opsDate001" required>
+                                    <input type="time" id="opsTime001" required>
+                                    <button onclick="scheduleInterview('001', 'Operation Round', 'opsDate001', 'opsTime001')">Send Invite</button>
+                                </div>
+                            </div>
+                            <div class="status-group" id="versantStatus001">
+                                <button class="schedule-button" id="versantButton001" onclick="toggleScheduleForm('versantForm001')">Versant/Voice</button>
+                                <select onchange="handleStatusChange('versantStatus001', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Select">Select</option>
+                                    <option value="Reject">Reject</option>
+                                    <option value="versant Pending">versant Pending</option>
+                                    <option value="2nd Attempt">2nd Attempt</option>
+                                </select>
+                                <div class="schedule-form" id="versantForm001">
+                                    <input type="date" id="versantDate001" required>
+                                    <input type="time" id="versantTime001" required>
+                                    <button onclick="scheduleInterview('001', 'Versant/Voice', 'versantDate001', 'versantTime001')">Send Invite</button>
+                                </div>
+                            </div>
+                            <div class="status-group" id="docsStatus001">
+                                <label>Documentation:</label>
+                                <select onchange="handleStatusChange('docsStatus001', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Submitted">Submitted</option>
+                                    <option value="Not Submitted">Not Submitted</option>
+                                    <option value="docs Pending">docs Pending</option>
+                                </select>
+                            </div>
+                            <div class="status-group" id="offerStatus001">
+                                <label>Offer Letter:</label>
+                                <select onchange="handleStatusChange('offerStatus001', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Released">Released</option>
+                                    <option value="Not Released">Not Released</option>
+                                    <option value="offer Pending">offer Pending</option>
+                                    <option value="Offer Rejected">Offer Rejected</option>
+                                </select>
+                            </div>
+                            <div class="status-group" id="joiningStatus001">
+                                <label>Joining:</label>
+                                <select onchange="handleStatusChange('joiningStatus001', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Joined">Joined</option>
+                                    <option value="Not Joined">Not Joined</option>
+                                    <option value="Not Responding">Not Responding</option>
+                                    <option value="Joining Pending">Joining Pending</option>
+                                </select>
+                            </div>
+                            <button class="save-button" id="saveButton001" onclick="saveData('001')">SAVE</button>
+                            <button class="complete-button" id="completeButton001" onclick="markAsCompleted('001')">MARK AS COMPLETED</button>
+                        </td>
+                    </tr>
+                    <tr onclick="toggleDetails(this, 'assigned', event)" ontouchstart="toggleDetails(this, 'assigned', event)">
+                        <td>002</td>
+                        <td>Sarah</td>
+                        <td>sarah@example.com</td>
+                        <td>1</td>
+                        <td>
+                            <a href="#" onclick="event.stopPropagation()">Delete</a>
+                            <button class="status-btn" onclick="toggleStatus(this)">Status</button>
+                        </td>
+                    </tr>
+                    <tr class="user-details" id="userDetails002">
+                        <td colspan="5" onclick="toggleDetails(this.parentElement, 'assigned', event)" ontouchstart="toggleDetails(this.parentElement, 'assigned', event)">
+                            <h3>User Details - Sarah</h3>
+                            <div>
+                                <h4>Personal Details</h4>
+                                <p>Full Name: Sarah</p>
+                                <p>Email: sarah@example.com</p>
+                                <p>Date of Birth: 1997-08-22</p>
+                                <p>Phone Number: +1-555-987-6543</p>
+                                <p>Address: 456 Oak Ave, Los Angeles, CA 90001, USA</p>
+                                <p>Father's Name: Vishal</p>
+                                <p>Mother's Name: Vineetha</p>
+                                <p>LinkedIn URL: linkedin.com/in/sarahjohnson</p>
+                                <p>GitHub URL: github.com/sarahjohnson</p>
+                                <p>Portfolio URL: sarahjohnsonportfolio.com</p>
+                                <p>Professional Objective: Aiming to leverage my expertise in data analysis to drive business insights and growth.</p>
+                            </div>
+                            <div>
+                                <h4>Education</h4>
+                                <p>M.Sc. in Data Science, ABC University, 2015-2018</p>
+                                <h4>Skills</h4>
+                                <p>Python, R, Data Visualization, Machine Learning</p>
+                                <h4>Work Experience</h4>
+                                <p>Data Analyst, DEF Inc, 2018-2021</p>
+                                <h4>Projects</h4>
+                                <p>Customer Segmentation Model, Sales Dashboard</p>
+                                <h4>Certifications</h4>
+                                <p>Certified Data Analyst (CDA), Microsoft Power BI</p>
+                                <h4>Achievements</h4>
+                                <p>Data Innovation Award 2020, Top Performer 2019</p>
+                                <h4>Languages</h4>
+                                <p>English (Fluent), French (Basic)</p>
+                                <h4>Hobbies</h4>
+                                <p>Reading, Swimming</p>
+                                <h4>References</h4>
+                                <p>Mark Lee, Supervisor at DEF Inc, mark.lee@definc.com</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="user-details status-section" id="statusDetails002" style="display:none;">
+                        <td colspan="5">
+                            <div class="status-header">
+                                <h3>Candidate Evaluation Status - Sarah</h3>
+                                <a href="#" onclick="sendEmail('002')" title="Send Email"><i class="fas fa-envelope"></i></a>
+                                <a href="#" onclick="sendWhatsApp('002')" title="Send WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                                <a href="#" onclick="makePhoneCall('002')" title="Make Phone Call"><i class="fas fa-phone"></i></a>
+                            </div>
+                            <div class="status-group" id="callingStatus002">
+                                <label>Calling Status:</label>
+                                <select onchange="handleStatusChange('callingStatus002', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Answered">Answered</option>
+                                    <option value="Answered-Busy">Answered-Busy</option>
+                                    <option value="Not Answered">Not Answered</option>
+                                    <option value="Not Connected">Not Connected</option>
+                                    <option value="Wrong Number">Wrong Number</option>
+                                </select>
+                                <div class="contact-options" id="contactOptions002">
+                                    <a href="#" onclick="sendEmail('002')" title="Send Email"><i class="fas fa-envelope"></i></a>
+                                    <a href="#" onclick="sendWhatsApp('002')" title="Send WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                                    <a href="#" onclick="makePhoneCall('002')" title="Make Phone Call"><i class="fas fa-phone"></i></a>
+                                </div>
+                            </div>
+                            <div class="status-group" id="jobStatus002">
+                                <label>Looking for Job:</label>
+                                <select onchange="handleStatusChange('jobStatus002', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Looking for Job">Looking for Job</option>
+                                    <option value="Not Looking for Job">Not Looking for Job</option>
+                                </select>
+                            </div>
+                            <div class="status-group" id="eligibilityStatus002">
+                                <label>Eligibility:</label>
+                                <select onchange="handleStatusChange('eligibilityStatus002', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Eligible for client">Eligible for client</option>
+                                    <option value="Not Eligible Client">Not Eligible Client</option>
+                                </select>
+                            </div>
+                            <div class="status-group" id="clientStatus002">
+                                <label>Client:</label>
+                                <select onchange="handleStatusChange('clientStatus002', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Wipro">Wipro</option>
+                                    <option value="Tech Mahindra">Tech Mahindra</option>
+                                    <option value="Sutherland">Sutherland</option>
+                                    <option value="Tele performance">Tele performance</option>
+                                    <option value="Digitide">Digitide</option>
+                                </select>
+                            </div>
+                            <div class="status-group" id="telephonicStatus002">
+                                <button class="schedule-button" id="telephonicButton002" onclick="toggleScheduleForm('telephonicForm002')">Telephonic Interview</button>
+                                <select onchange="handleStatusChange('telephonicStatus002', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Select">Select</option>
+                                    <option value="Reject">Reject</option>
+                                    <option value="recruiter Pending">recruiter Pending</option>
+                                </select>
+                                <div class="schedule-form" id="telephonicForm002">
+                                    <input type="date" id="telephonicDate002" required>
+                                    <input type="time" id="telephonicTime002" required>
+                                    <button onclick="scheduleInterview('002', 'Telephonic Interview', 'telephonicDate002', 'telephonicTime002')">Send Invite</button>
+                                </div>
+                            </div>
+                            <div class="status-group" id="hrStatus002">
+                                <button class="schedule-button" id="hrButton002" onclick="toggleScheduleForm('hrForm002')">HR Interview</button>
+                                <select onchange="handleStatusChange('hrStatus002', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Select">Select</option>
+                                    <option value="Reject">Reject</option>
+                                    <option value="hr Pending">hr Pending</option>
+                                </select>
+                                <div class="schedule-form" id="hrForm002">
+                                    <input type="date" id="hrDate002" required>
+                                    <input type="time" id="hrTime002" required>
+                                    <button onclick="scheduleInterview('002', 'HR Interview', 'hrDate002', 'hrTime002')">Send Invite</button>
+                                </div>
+                            </div>
+                            <div class="status-group" id="opsStatus002">
+                                <button class="schedule-button" id="opsButton002" onclick="toggleScheduleForm('opsForm002')">Operation Round</button>
+                                <select onchange="handleStatusChange('opsStatus002', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Select">Select</option>
+                                    <option value="Reject">Reject</option>
+                                    <option value="ops Pending">ops Pending</option>
+                                    <option value="ops 2nd Chance">ops 2nd Chance</option>
+                                </select>
+                                <div class="schedule-form" id="opsForm002">
+                                    <input type="date" id="opsDate002" required>
+                                    <input type="time" id="opsTime002" required>
+                                    <button onclick="scheduleInterview('002', 'Operation Round', 'opsDate002', 'opsTime002')">Send Invite</button>
+                                </div>
+                            </div>
+                            <div class="status-group" id="versantStatus002">
+                                <button class="schedule-button" id="versantButton002" onclick="toggleScheduleForm('versantForm002')">Versant/Voice</button>
+                                <select onchange="handleStatusChange('versantStatus002', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Select">Select</option>
+                                    <option value="Reject">Reject</option>
+                                    <option value="versant Pending">versant Pending</option>
+                                    <option value="2nd Attempt">2nd Attempt</option>
+                                </select>
+                                <div class="schedule-form" id="versantForm002">
+                                    <input type="date" id="versantDate002" required>
+                                    <input type="time" id="versantTime002" required>
+                                    <button onclick="scheduleInterview('002', 'Versant/Voice', 'versantDate002', 'versantTime002')">Send Invite</button>
+                                </div>
+                            </div>
+                            <div class="status-group" id="docsStatus002">
+                                <label>Documentation:</label>
+                                <select onchange="handleStatusChange('docsStatus002', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Submitted">Submitted</option>
+                                    <option value="Not Submitted">Not Submitted</option>
+                                    <option value="docs Pending">docs Pending</option>
+                                </select>
+                            </div>
+                            <div class="status-group" id="offerStatus002">
+                                <label>Offer Letter:</label>
+                                <select onchange="handleStatusChange('offerStatus002', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Released">Released</option>
+                                    <option value="Not Released">Not Released</option>
+                                    <option value="offer Pending">offer Pending</option>
+                                    <option value="Offer Rejected">Offer Rejected</option>
+                                </select>
+                            </div>
+                            <div class="status-group" id="joiningStatus002">
+                                <label>Joining:</label>
+                                <select onchange="handleStatusChange('joiningStatus002', this.value)">
+                                    <option value="">Select</option>
+                                    <option value="Joined">Joined</option>
+                                    <option value="Not Joined">Not Joined</option>
+                                    <option value="Not Responding">Not Responding</option>
+                                    <option value="Joining Pending">Joining Pending</option>
+                                </select>
+                            </div>
+                            <button class="save-button" id="saveButton002" onclick="saveData('002')">SAVE</button>
+                            <button class="complete-button" id="completeButton002" onclick="markAsCompleted('002')">MARK AS COMPLETED</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Completed Users Table -->
+        <div id="completed-view" class="hidden">
+            <table id="completed-table">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Resumes</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Completed users will be added here dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Define users data
+        const users = [
+            {
+                id: '001',
+                name: "Kishore Kumar",
+                email: "kishore.kumar@example.com",
+                phone: "+91-555-123-4567",
+                details: {
+                    personal: {
+                        fullName: "Kishore Kumar",
+                        email: "kishore.kumar@example.com",
+                        dob: "1995-05-15",
+                        phone: "+91-555-123-4567",
+                        address: "123 Main St, New York, NY 10001, USA",
+                        fatherName: "Anand",
+                        motherName: "Supraja",
+                        linkedin: "linkedin.com/in/kishorekumar",
+                        github: "github.com/kishorekumar",
+                        portfolio: "kishorekumarportfolio.com",
+                        objective: "Seeking a challenging role to utilize my skills in software development and contribute to innovative projects."
+                    },
+                    education: "B.Sc. in Computer Science, XYZ University, 2013-2017",
+                    skills: "Python, JavaScript, SQL, Problem Solving",
+                    workExperience: "Software Developer, ABC Corp, 2017-2020",
+                    projects: "Personal Blog Website, E-Commerce Platform",
+                    certifications: "AWS Certified Developer, Google Cloud Associate",
+                    achievements: "Best Employee Award 2019, Hackathon Winner 2018",
+                    languages: "English (Fluent), Spanish (Intermediate)",
+                    hobbies: "Photography, Hiking",
+                    references: "Jane Smith, Manager at ABC Corp, jane.smith@abccorp.com"
+                }
+            },
+            {
+                id: '002',
+                name: "Sarah",
+                email: "sarah@example.com",
+                phone: "+1-555-987-6543",
+                details: {
+                    personal: {
+                        fullName: "Sarah",
+                        email: "sarah@example.com",
+                        dob: "1997-08-22",
+                        phone: "+1-555-987-6543",
+                        address: "456 Oak Ave, Los Angeles, CA 90001, USA",
+                        fatherName: "Vishal",
+                        motherName: "Vineetha",
+                        linkedin: "linkedin.com/in/sarahjohnson",
+                        github: "github.com/sarahjohnson",
+                        portfolio: "sarahjohnsonportfolio.com",
+                        objective: "Aiming to leverage my expertise in data analysis to drive business insights and growth."
+                    },
+                    education: "M.Sc. in Data Science, ABC University, 2015-2018",
+                    skills: "Python, R, Data Visualization, Machine Learning",
+                    workExperience: "Data Analyst, DEF Inc, 2018-2021",
+                    projects: "Customer Segmentation Model, Sales Dashboard",
+                    certifications: "Certified Data Analyst (CDA), Microsoft Power BI",
+                    achievements: "Data Innovation Award 2020, Top Performer 2019",
+                    languages: "English (Fluent), French (Basic)",
+                    hobbies: "Reading, Swimming",
+                    references: "Mark Lee, Supervisor at DEF Inc, mark.lee@definc.com"
+                }
+            }
+        ];
+
+        // Track completed users and their statuses
+        const completedUsers = [];
+        const savedStatuses = {};
+        let lastToggledRow = null; // Track the last toggled row
+
+        // Define toggleDetails at the top to ensure it's available
+        function toggleDetails(row, tab, event) {
+            // Check if the click originated from an action button or link
+            if (event && (event.target.tagName === 'A' || event.target.tagName === 'BUTTON' || 
+                event.target.closest('a') || event.target.closest('button'))) {
+                return; // Don't toggle if clicking on action buttons/links
+            }
+
+            const userId = row.cells[0].textContent;
+            const detailsRow = document.getElementById(`userDetails${userId}`);
+            const statusRow = document.getElementById(`statusDetails${userId}`);
+            const isDetailsVisible = detailsRow && detailsRow.style.display === 'table-row';
+
+            // If clicking the same row that's already open, close it
+            if (lastToggledRow === row && isDetailsVisible) {
+                if (detailsRow) detailsRow.style.display = 'none';
+                if (statusRow) statusRow.style.display = 'none';
+                lastToggledRow = null;
+                return;
+            }
+
+            // Hide all user details and status rows
+            document.querySelectorAll('.user-details, .status-details').forEach(row => {
+                row.style.display = 'none';
+            });
+
+            // Show the selected row's details
+            if (detailsRow) detailsRow.style.display = 'table-row';
+            lastToggledRow = row;
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function showView(view) {
+            const assignedView = document.getElementById('assigned-view');
+            const completedView = document.getElementById('completed-view');
+            const assignedBtn = document.querySelector('.view-button:nth-child(1)');
+            const completedBtn = document.querySelector('.view-button:nth-child(2)');
+            
+            if (view === 'assigned') {
+                assignedView.classList.remove('hidden');
+                completedView.classList.add('hidden');
+                assignedBtn.classList.add('active');
+                completedBtn.classList.remove('active');
+            } else {
+                assignedView.classList.add('hidden');
+                completedView.classList.remove('hidden');
+                assignedBtn.classList.remove('active');
+                completedBtn.classList.add('active');
+            }
+        }
+
+        function toggleStatus(button) {
+            const row = button.parentElement.parentElement;
+            const userId = row.cells[0].textContent;
+            const detailsRow = document.getElementById(`userDetails${userId}`);
+            const statusRow = document.getElementById(`statusDetails${userId}`);
+            const isStatusVisible = statusRow.style.display === 'table-row';
+
+            // Prevent the row's click/touch event from triggering
+            event.stopPropagation();
+
+            // Hide all user details and status rows
+            document.querySelectorAll('.user-details, .status-details').forEach(row => {
+                row.style.display = 'none';
+            });
+
+            // Show the status row and make the first status group visible
+            if (!isStatusVisible) {
+                statusRow.style.display = 'table-row';
+                document.getElementById(`callingStatus${userId}`).classList.add('visible');
+                
+                // Load saved statuses
+                loadSavedStatuses(userId);
+                updateSaveButtonPosition(userId);
+            }
+            lastToggledRow = null; // Reset last toggled row when opening status
+        }
+
+        function loadSavedStatuses(userId) {
+            if (savedStatuses[userId]) {
+                const statusGroups = [
+                    'callingStatus', 'jobStatus', 'eligibilityStatus', 'clientStatus',
+                    'telephonicStatus', 'hrStatus', 'opsStatus', 'versantStatus',
+                    'docsStatus', 'offerStatus', 'joiningStatus'
+                ];
+                
+                statusGroups.forEach(group => {
+                    const select = document.getElementById(`${group}${userId}`)?.querySelector('select');
+                    if (select && savedStatuses[userId][group]) {
+                        select.value = savedStatuses[userId][group];
+                        const groupElement = document.getElementById(`${group}${userId}`);
+                        if (groupElement) groupElement.classList.add('visible');
+                    }
+                });
+
+                // Handle contact options visibility
+                const callingStatus = savedStatuses[userId]['callingStatus'];
+                if (callingStatus === 'Not Answered') {
+                    document.getElementById(`contactOptions${userId}`).style.display = 'flex';
+                }
+
+                // Update button states based on saved statuses
+                updateScheduleButtonStates(userId);
+            }
+        }
+
+        function updateScheduleButtonStates(userId) {
+            const statusGroups = ['telephonicStatus', 'hrStatus', 'opsStatus', 'versantStatus'];
+            statusGroups.forEach(group => {
+                const select = document.getElementById(`${group}${userId}`)?.querySelector('select');
+                const button = document.getElementById(`${group.replace('Status', '')}Button${userId}`);
+                if (select && button) {
+                    if (select.value === 'Select') {
+                        button.classList.add('disabled');
+                        button.removeAttribute('onclick');
+                    } else {
+                        button.classList.remove('disabled');
+                        button.setAttribute('onclick', `toggleScheduleForm('${group.replace('Status', '')}Form${userId}')`);
+                    }
+                }
+            });
+        }
+
+        function handleStatusChange(groupId, value) {
+            const userId = groupId.replace(/[a-zA-Z]+/, '');
+            const currentGroup = document.getElementById(groupId);
+            const nextGroups = {
+                'callingStatus': 'jobStatus',
+                'jobStatus': 'eligibilityStatus',
+                'eligibilityStatus': 'clientStatus',
+                'clientStatus': 'telephonicStatus',
+                'telephonicStatus': 'hrStatus',
+                'hrStatus': 'opsStatus',
+                'opsStatus': 'versantStatus',
+                'versantStatus': 'docsStatus',
+                'docsStatus': 'offerStatus',
+                'offerStatus': 'joiningStatus'
+            };
+
+            // Handle contact options for "Not Answered"
+            if (groupId.startsWith('callingStatus') && value === 'Not Answered') {
+                document.getElementById(`contactOptions${userId}`).style.display = 'flex';
+                // Hide all subsequent groups when "Not Answered" is selected
+                Object.values(nextGroups).forEach(nextGroupId => {
+                    const nextGroup = document.getElementById(`${nextGroupId}${userId}`);
+                    if (nextGroup) nextGroup.classList.remove('visible');
+                });
+            } else if (groupId.startsWith('callingStatus')) {
+                document.getElementById(`contactOptions${userId}`).style.display = 'none';
+            }
+
+            const positiveResponses = {
+                'callingStatus': ['Answered'],
+                'jobStatus': ['Looking for Job'],
+                'eligibilityStatus': ['Eligible for client'],
+                'clientStatus': ['Wipro', 'Tech Mahindra', 'Sutherland', 'Tele performance', 'Digitide'],
+                'telephonicStatus': ['Select'],
+                'hrStatus': ['Select'],
+                'opsStatus': ['Select', 'ops 2nd Chance'],
+                'versantStatus': ['Select', '2nd Attempt'],
+                'docsStatus': ['Submitted'],
+                'offerStatus': ['Released']
+            };
+
+            const baseGroup = groupId.replace(userId, '');
+            const nextGroupId = nextGroups[baseGroup];
+            if (nextGroupId && positiveResponses[baseGroup].includes(value)) {
+                const nextGroup = document.getElementById(`${nextGroupId}${userId}`);
+                if (nextGroup) nextGroup.classList.add('visible');
+            }
+
+            // Update schedule button states for interview rounds
+            if (['telephonicStatus', 'hrStatus', 'opsStatus', 'versantStatus'].includes(baseGroup)) {
+                const button = document.getElementById(`${baseGroup.replace('Status', '')}Button${userId}`);
+                if (button) {
+                    if (value === 'Select') {
+                        button.classList.add('disabled');
+                        button.removeAttribute('onclick');
+                    } else {
+                        button.classList.remove('disabled');
+                        button.setAttribute('onclick', `toggleScheduleForm('${baseGroup.replace('Status', '')}Form${userId}')`);
+                    }
+                }
+            }
+
+            updateSaveButtonPosition(userId);
+
+            // Save the status immediately
+            if (!savedStatuses[userId]) savedStatuses[userId] = {};
+            savedStatuses[userId][baseGroup] = value;
+        }
+
+        function updateSaveButtonPosition(userId) {
+            const statusGroups = [
+                'callingStatus', 'jobStatus', 'eligibilityStatus', 'clientStatus',
+                'telephonicStatus', 'hrStatus', 'opsStatus', 'versantStatus',
+                'docsStatus', 'offerStatus', 'joiningStatus'
+            ];
+            let lastVisibleGroup = null;
+
+            for (let group of statusGroups) {
+                const groupElement = document.getElementById(`${group}${userId}`);
+                if (groupElement && window.getComputedStyle(groupElement).display !== 'none' && groupElement.classList.contains('visible')) {
+                    lastVisibleGroup = groupElement;
+                }
+            }
+
+            const saveButton = document.getElementById(`saveButton${userId}`);
+            const completeButton = document.getElementById(`completeButton${userId}`);
+            if (lastVisibleGroup) {
+                saveButton.style.display = 'inline-block';
+                completeButton.style.display = 'inline-block';
+                saveButton.style.marginTop = '10px';
+                completeButton.style.marginTop = '10px';
+                lastVisibleGroup.insertAdjacentElement('afterend', saveButton);
+                saveButton.insertAdjacentElement('afterend', completeButton);
+            } else {
+                saveButton.style.display = 'none';
+                completeButton.style.display = 'none';
+            }
+        }
+
+        function sendEmail(userId) {
+            const user = users.find(u => u.id === userId);
+            if (user) {
+                window.location.href = `mailto:${user.email}?subject=Follow-up Call`;
+            }
+        }
+
+        function sendWhatsApp(userId) {
+            const user = users.find(u => u.id === userId);
+            if (user) {
+                const phone = user.phone.replace(/[^0-9]/g, '');
+                window.open(`https://wa.me/${phone}?text=Follow-up%20regarding%20your%20application`, '_blank');
+            }
+        }
+
+        function makePhoneCall(userId) {
+            const user = users.find(u => u.id === userId);
+            if (user) {
+                const phone = user.phone.replace(/[^0-9]/g, '');
+                window.location.href = `tel:${phone}`;
+            }
+        }
+
+        function saveData(userId) {
+            const statusGroups = [
+                'callingStatus', 'jobStatus', 'eligibilityStatus', 'clientStatus',
+                'telephonicStatus', 'hrStatus', 'opsStatus', 'versantStatus',
+                'docsStatus', 'offerStatus', 'joiningStatus'
+            ];
+
+            if (!savedStatuses[userId]) savedStatuses[userId] = {};
+            
+            statusGroups.forEach(group => {
+                const select = document.getElementById(`${group}${userId}`)?.querySelector('select');
+                if (select && select.value) {
+                    savedStatuses[userId][group] = select.value;
+                }
+            });
+
+            showNotification(`Data saved successfully for user ${userId} in Assigned tab!`);
+            const statusRow = document.getElementById(`statusDetails${userId}`);
+            if (statusRow) {
+                statusRow.style.display = 'none';
+            }
+            lastToggledRow = null;
+        }
+
+        function toggleScheduleForm(formId) {
+            const form = document.getElementById(formId);
+            form.style.display = form.style.display === 'block' ? 'none' : 'block';
+            event.stopPropagation(); // Prevent triggering parent click events
+        }
+
+        function scheduleInterview(userId, round, dateInputId, timeInputId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            const dateInput = document.getElementById(dateInputId);
+            const timeInput = document.getElementById(timeInputId);
+            const date = dateInput.value;
+            const time = timeInput.value;
+
+            if (!date || !time) {
+                showNotification('Please select both date and time.');
+                return;
+            }
+
+            const meetLink = 'https://meet.google.com/abc-1234-xyz'; // Placeholder Google Meet link
+            const subject = encodeURIComponent(`${round} Schedule for ${user.name}`);
+            const body = encodeURIComponent(
+                `Dear ${user.name},\n\n` +
+                `You are invited to attend the ${round} on ${date} at ${time}.\n` +
+                `Join the meeting using this Google Meet link: ${meetLink}\n\n` +
+                `Best regards,\nCampus1 Team`
+            );
+
+            window.location.href = `mailto:${user.email}?subject=${subject}&body=${body}`;
+            showNotification(`Interview invite for ${round} sent to ${user.email}!`);
+            document.getElementById(dateInputId).value = '';
+            document.getElementById(timeInputId).value = '';
+            document.getElementById(dateInputId).closest('.schedule-form').style.display = 'none';
+        }
+
+        function markAsCompleted(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            // Save statuses before moving to completed
+            if (!savedStatuses[userId]) savedStatuses[userId] = {};
+            const statusGroups = [
+                'callingStatus', 'jobStatus', 'eligibilityStatus', 'clientStatus',
+                'telephonicStatus', 'hrStatus', 'opsStatus', 'versantStatus',
+                'docsStatus', 'offerStatus', 'joiningStatus'
+            ];
+
+            statusGroups.forEach(group => {
+                const select = document.getElementById(`${group}${userId}`)?.querySelector('select');
+                if (select && select.value) {
+                    savedStatuses[userId][group] = select.value;
+                }
+            });
+
+            // Add to completed users if not already there
+            if (!completedUsers.some(u => u.id === userId)) {
+                const userWithStatus = { ...user, statuses: savedStatuses[userId] || {} };
+                completedUsers.push(userWithStatus);
+
+                // Remove from assigned table
+                const assignedTable = document.getElementById('assigned-table');
+                const rows = assignedTable.querySelectorAll('tr');
+                for (let i = 0; i < rows.length; i++) {
+                    if (rows[i].cells[0] && rows[i].cells[0].textContent === userId) {
+                        assignedTable.deleteRow(i); // Main row
+                        assignedTable.deleteRow(i); // User details row
+                        assignedTable.deleteRow(i); // Status details row
+                        break;
+                    }
+                }
+
+                // Add to completed table with details row
+                const completedTable = document.getElementById('completed-table').getElementsByTagName('tbody')[0];
+                const newRow = completedTable.insertRow();
+                
+                newRow.insertCell(0).textContent = user.id;
+                newRow.insertCell(1).textContent = user.name;
+                newRow.insertCell(2).textContent = user.email;
+                newRow.insertCell(3).textContent = "1";
+                const statusCell = newRow.insertCell(4);
+                statusCell.innerHTML = 'Completed <button class="reopen-button" onclick="event.stopPropagation(); reopenUser(\'' + user.id + '\')">REOPEN</button>';
+                newRow.setAttribute('onclick', `toggleDetails(this, 'completed', event)`);
+                newRow.setAttribute('ontouchstart', `toggleDetails(this, 'completed', event)`);
+
+                // Add details row with user details and statuses
+                const detailsRow = completedTable.insertRow();
+                detailsRow.className = 'user-details';
+                detailsRow.id = `userDetails${user.id}`;
+                const detailsCell = detailsRow.insertCell(0);
+                detailsCell.colSpan = 5;
+                detailsCell.setAttribute('onclick', `toggleDetails(this.parentElement, 'completed', event)`);
+                detailsCell.setAttribute('ontouchstart', `toggleDetails(this.parentElement, 'completed', event)`);
+                detailsCell.innerHTML = `
+                    <h3>User Details - ${user.name}</h3>
+                    <div>
+                        <h4>Personal Details</h4>
+                        <p>Full Name: ${user.details.personal.fullName}</p>
+                        <p>Email: ${user.details.personal.email}</p>
+                        <p>Date of Birth: ${user.details.personal.dob}</p>
+                        <p>Phone Number: ${user.details.personal.phone}</p>
+                        <p>Address: ${user.details.personal.address}</p>
+                        <p>Father's Name: ${user.details.personal.fatherName}</p>
+                        <p>Mother's Name: ${user.details.personal.motherName}</p>
+                        <p>LinkedIn URL: ${user.details.personal.linkedin}</p>
+                        <p>GitHub URL: ${user.details.personal.github}</p>
+                        <p>Portfolio URL: ${user.details.personal.portfolio}</p>
+                        <p>Professional Objective: ${user.details.personal.objective}</p>
+                    </div>
+                    <div>
+                        <h4>Education</h4>
+                        <p>${user.details.education}</p>
+                        <h4>Skills</h4>
+                        <p>${user.details.skills}</p>
+                        <h4>Work Experience</h4>
+                        <p>${user.details.workExperience}</p>
+                        <h4>Projects</h4>
+                        <p>${user.details.projects}</p>
+                        <h4>Certifications</h4>
+                        <p>${user.details.certifications}</p>
+                        <h4>Achievements</h4>
+                        <p>${user.details.achievements}</p>
+                        <h4>Languages</h4>
+                        <p>${user.details.languages}</p>
+                        <h4>Hobbies</h4>
+                        <p>${user.details.hobbies}</p>
+                        <h4>References</h4>
+                        <p>${user.details.references}</p>
+                    </div>
+                    <div class="status-display">
+                        <h4>Candidate Evaluation Status</h4>
+                        ${statusGroups.map(group => savedStatuses[userId][group] ? `<p>${group.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}: ${savedStatuses[userId][group]}</p>` : '').join('')}
+                    </div>
+                `;
+            }
+            
+            showNotification(`User ${userId} marked as completed and moved to File Closed tab!`);
+            showView('completed');
+            lastToggledRow = null;
+        }
+
+        function reopenUser(userId) {
+            const userIndex = completedUsers.findIndex(u => u.id === userId);
+            if (userIndex === -1) return;
+
+            const user = completedUsers[userIndex];
+            const assignedTable = document.getElementById('assigned-table').getElementsByTagName('tbody')[0];
+
+            // Add main row to assigned table
+            const newRow = assignedTable.insertRow();
+            newRow.insertCell(0).textContent = user.id;
+            newRow.insertCell(1).textContent = user.name;
+            newRow.insertCell(2).textContent = user.email;
+            newRow.insertCell(3).textContent = "1";
+            newRow.insertCell(4).innerHTML = '<a href="#" onclick="event.stopPropagation()">Delete</a><button class="status-btn" onclick="toggleStatus(this)">Status</button>';
+            newRow.setAttribute('onclick', `toggleDetails(this, 'assigned', event)`);
+            newRow.setAttribute('ontouchstart', `toggleDetails(this, 'assigned', event)`);
+
+            // Add user details row
+            const detailsRow = assignedTable.insertRow();
+            detailsRow.className = 'user-details';
+            detailsRow.id = `userDetails${user.id}`;
+            const detailsCell = detailsRow.insertCell(0);
+            detailsCell.colSpan = 5;
+            detailsCell.setAttribute('onclick', `toggleDetails(this.parentElement, 'assigned', event)`);
+            detailsCell.setAttribute('ontouchstart', `toggleDetails(this.parentElement, 'assigned', event)`);
+            detailsCell.innerHTML = `
+                <h3>User Details - ${user.name}</h3>
+                <div>
+                    <h4>Personal Details</h4>
+                    <p>Full Name: ${user.details.personal.fullName}</p>
+                    <p>Email: ${user.details.personal.email}</p>
+                    <p>Date of Birth: ${user.details.personal.dob}</p>
+                    <p>Phone Number: ${user.details.personal.phone}</p>
+                    <p>Address: ${user.details.personal.address}</p>
+                    <p>Father's Name: ${user.details.personal.fatherName}</p>
+                    <p>Mother's Name: ${user.details.personal.motherName}</p>
+                    <p>LinkedIn URL: ${user.details.personal.linkedin}</p>
+                    <p>GitHub URL: ${user.details.personal.github}</p>
+                    <p>Portfolio URL: ${user.details.personal.portfolio}</p>
+                    <p>Professional Objective: ${user.details.personal.objective}</p>
+                </div>
+                <div>
+                    <h4>Education</h4>
+                    <p>${user.details.education}</p>
+                    <h4>Skills</h4>
+                    <p>${user.details.skills}</p>
+                    <h4>Work Experience</h4>
+                    <p>${user.details.workExperience}</p>
+                    <h4>Projects</h4>
+                    <p>${user.details.projects}</p>
+                    <h4>Certifications</h4>
+                    <p>${user.details.certifications}</p>
+                    <h4>Achievements</h4>
+                    <p>${user.details.achievements}</p>
+                    <h4>Languages</h4>
+                    <p>${user.details.languages}</p>
+                    <h4>Hobbies</h4>
+                    <p>${user.details.hobbies}</p>
+                    <h4>References</h4>
+                    <p>${user.details.references}</p>
+                </div>
+            `;
+
+            // Add status details row
+            const statusRow = assignedTable.insertRow();
+            statusRow.className = 'user-details status-section';
+            statusRow.id = `statusDetails${user.id}`;
+            statusRow.style.display = 'none';
+            const statusCell = statusRow.insertCell(0);
+            statusCell.colSpan = 5;
+            statusCell.innerHTML = `
+                <div class="status-header">
+                    <h3>Candidate Evaluation Status - ${user.name}</h3>
+                    <a href="#" onclick="sendEmail('${user.id}')" title="Send Email"><i class="fas fa-envelope"></i></a>
+                    <a href="#" onclick="sendWhatsApp('${user.id}')" title="Send WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" onclick="makePhoneCall('${user.id}')" title="Make Phone Call"><i class="fas fa-phone"></i></a>
+                </div>
+                <div class="status-group" id="callingStatus${user.id}">
+                    <label>Calling Status:</label>
+                    <select onchange="handleStatusChange('callingStatus${user.id}', this.value)">
+                        <option value="">Select</option>
+                        <option value="Answered">Answered</option>
+                        <option value="Answered-Busy">Answered-Busy</option>
+                        <option value="Not Answered">Not Answered</option>
+                        <option value="Not Connected">Not Connected</option>
+                        <option value="Wrong Number">Wrong Number</option>
+                    </select>
+                    <div class="contact-options" id="contactOptions${user.id}">
+                        <a href="#" onclick="sendEmail('${user.id}')" title="Send Email"><i class="fas fa-envelope"></i></a>
+                        <a href="#" onclick="sendWhatsApp('${user.id}')" title="Send WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" onclick="makePhoneCall('${user.id}')" title="Make Phone Call"><i class="fas fa-phone"></i></a>
+                    </div>
+                </div>
+                <div class="status-group" id="jobStatus${user.id}">
+                    <label>Looking for Job:</label>
+                    <select onchange="handleStatusChange('jobStatus${user.id}', this.value)">
+                        <option value="">Select</option>
+                        <option value="Looking for Job">Looking for Job</option>
+                        <option value="Not Looking for Job">Not Looking for Job</option>
+                    </select>
+                </div>
+                <div class="status-group" id="eligibilityStatus${user.id}">
+                    <label>Eligibility:</label>
+                    <select onchange="handleStatusChange('eligibilityStatus${user.id}', this.value)">
+                        <option value="">Select</option>
+                        <option value="Eligible for client">Eligible for client</option>
+                        <option value="Not Eligible Client">Not Eligible Client</option>
+                    </select>
+                </div>
+                <div class="status-group" id="clientStatus${user.id}">
+                    <label>Client:</label>
+                    <select onchange="handleStatusChange('clientStatus${user.id}', this.value)">
+                        <option value="">Select</option>
+                        <option value="Wipro">Wipro</option>
+                        <option value="Tech Mahindra">Tech Mahindra</option>
+                        <option value="Sutherland">Sutherland</option>
+                        <option value="Tele performance">Tele performance</option>
+                        <option value="Digitide">Digitide</option>
+                    </select>
+                </div>
+                <div class="status-group" id="telephonicStatus${user.id}">
+                    <button class="schedule-button" id="telephonicButton${user.id}" onclick="toggleScheduleForm('telephonicForm${user.id}')">Telephonic Interview</button>
+                    <select onchange="handleStatusChange('telephonicStatus${user.id}', this.value)">
+                        <option value="">Select</option>
+                        <option value="Select">Select</option>
+                        <option value="Reject">Reject</option>
+                        <option value="recruiter Pending">recruiter Pending</option>
+                    </select>
+                    <div class="schedule-form" id="telephonicForm${user.id}">
+                        <input type="date" id="telephonicDate${user.id}" required>
+                        <input type="time" id="telephonicTime${user.id}" required>
+                        <button onclick="scheduleInterview('${user.id}', 'Telephonic Interview', 'telephonicDate${user.id}', 'telephonicTime${user.id}')">Send Invite</button>
+                    </div>
+                </div>
+                <div class="status-group" id="hrStatus${user.id}">
+                    <button class="schedule-button" id="hrButton${user.id}" onclick="toggleScheduleForm('hrForm${user.id}')">HR Interview</button>
+                    <select onchange="handleStatusChange('hrStatus${user.id}', this.value)">
+                        <option value="">Select</option>
+                        <option value="Select">Select</option>
+                        <option value="Reject">Reject</option>
+                        <option value="hr Pending">hr Pending</option>
+                    </select>
+                    <div class="schedule-form" id="hrForm${user.id}">
+                        <input type="date" id="hrDate${user.id}" required>
+                        <input type="time" id="hrTime${user.id}" required>
+                        <button onclick="scheduleInterview('${user.id}', 'HR Interview', 'hrDate${user.id}', 'hrTime${user.id}')">Send Invite</button>
+                    </div>
+                </div>
+                <div class="status-group" id="opsStatus${user.id}">
+                    <button class="schedule-button" id="opsButton${user.id}" onclick="toggleScheduleForm('opsForm${user.id}')">Operation Round</button>
+                    <select onchange="handleStatusChange('opsStatus${user.id}', this.value)">
+                        <option value="">Select</option>
+                        <option value="Select">Select</option>
+                        <option value="Reject">Reject</option>
+                        <option value="ops Pending">ops Pending</option>
+                        <option value="ops 2nd Chance">ops 2nd Chance</option>
+                    </select>
+                    <div class="schedule-form" id="opsForm${user.id}">
+                        <input type="date" id="opsDate${user.id}" required>
+                        <input type="time" id="opsTime${user.id}" required>
+                        <button onclick="scheduleInterview('${user.id}', 'Operation Round', 'opsDate${user.id}', 'opsTime${user.id}')">Send Invite</button>
+                    </div>
+                </div>
+                <div class="status-group" id="versantStatus${user.id}">
+                    <button class="schedule-button" id="versantButton${user.id}" onclick="toggleScheduleForm('versantForm${user.id}')">Versant/Voice</button>
+                    <select onchange="handleStatusChange('versantStatus${user.id}', this.value)">
+                        <option value="">Select</option>
+                        <option value="Select">Select</option>
+                        <option value="Reject">Reject</option>
+                        <option value="versant Pending">versant Pending</option>
+                        <option value="2nd Attempt">2nd Attempt</option>
+                    </select>
+                    <div class="schedule-form" id="versantForm${user.id}">
+                        <input type="date" id="versantDate${user.id}" required>
+                        <input type="time" id="versantTime${user.id}" required>
+                        <button onclick="scheduleInterview('${user.id}', 'Versant/Voice', 'versantDate${user.id}', 'versantTime${user.id}')">Send Invite</button>
+                    </div>
+                </div>
+                <div class="status-group" id="docsStatus${user.id}">
+                    <label>Documentation:</label>
+                    <select onchange="handleStatusChange('docsStatus${user.id}', this.value)">
+                        <option value="">Select</option>
+                        <option value="Submitted">Submitted</option>
+                        <option value="Not Submitted">Not Submitted</option>
+                        <option value="docs Pending">docs Pending</option>
+                    </select>
+                </div>
+                <div class="status-group" id="offerStatus${user.id}">
+                    <label>Offer Letter:</label>
+                    <select onchange="handleStatusChange('offerStatus${user.id}', this.value)">
+                        <option value="">Select</option>
+                        <option value="Released">Released</option>
+                        <option value="Not Released">Not Released</option>
+                        <option value="offer Pending">offer Pending</option>
+                        <option value="Offer Rejected">Offer Rejected</option>
+                    </select>
+                </div>
+                <div class="status-group" id="joiningStatus${user.id}">
+                    <label>Joining:</label>
+                    <select onchange="handleStatusChange('joiningStatus${user.id}', this.value)">
+                        <option value="">Select</option>
+                        <option value="Joined">Joined</option>
+                        <option value="Not Joined">Not Joined</option>
+                        <option value="Not Responding">Not Responding</option>
+                        <option value="Joining Pending">Joining Pending</option>
+                    </select>
+                </div>
+                <button class="save-button" id="saveButton${user.id}" onclick="saveData('${user.id}')">SAVE</button>
+                <button class="complete-button" id="completeButton${user.id}" onclick="markAsCompleted('${user.id}')">MARK AS COMPLETED</button>
+            `;
+
+            // Restore saved statuses
+            loadSavedStatuses(user.id);
+
+            // Remove from completed users and table
+            const completedTable = document.getElementById('completed-table').getElementsByTagName('tbody')[0];
+            const completedRows = completedTable.querySelectorAll('tr');
+            for (let i = 0; i < completedRows.length; i++) {
+                if (completedRows[i].cells[0] && completedRows[i].cells[0].textContent === userId) {
+                    completedTable.deleteRow(i); // Main row
+                    if (completedRows[i]) completedTable.deleteRow(i); // Details row
+                    break;
+                }
+            }
+            completedUsers.splice(userIndex, 1);
+
+            showNotification(`User ${userId} reopened and moved to Assigned tab!`);
+            showView('assigned');
+        }
+
+        // Check if user is logged in when page loads
+        window.addEventListener('load', function() {
+            if (localStorage.getItem('isLoggedIn') !== 'true') {
+                // User is not logged in, redirect to login page
+                window.location.href = 'login.html';
+            }
+        });
+//Backend
+document.addEventListener('DOMContentLoaded', async () => {
+    const res = await fetch('/api/users', { credentials: 'include' });
+    const users = await res.json();
+
+    const tbody = document.querySelector('#assigned-table tbody');
+    tbody.innerHTML = ''; // Clear existing
+
+    users.forEach(user => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${user.id}</td>
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td>1</td>
+            <td>
+                <a href="#" onclick="deleteUser(${user.id})">Delete</a>
+                <button class="status-btn" onclick="toggleStatus(this)">Status</button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+});
+function deleteUser(id) {
+    fetch(`/api/users/${id}`, {
+        method: 'DELETE',
+        credentials: 'include'
+    })
+    .then(() => {
+        alert("User deleted");
+        location.reload();
+    });
+}
+</script>
+</body>
+</html>

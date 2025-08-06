@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus1 - Admin Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(90deg, #6b46c1, #4c51bf);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 20%;
+            width: 80%;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            height: 60px;
+        }
+        .header .logo {
+            display: flex;
+            align-items: center;
+        }
+        .header .logo i {
+            font-size: 28px;
+            margin-right: 12px;
+            color: #60a5fa;
+        }
+        .header .logo span {
+            font-size: 28px;
+            font-weight: bold;
+            color: #f472b6;
+        }
+        .header .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .header .user-info .avatar {
+            background-color: #f59e0b;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        .header .user-info .avatar i {
+            color: white;
+            font-size: 16px;
+        }
+        .header .user-info .name {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .header .user-info .welcome {
+            font-size: 14px;
+            color: #d1d5db;
+        }
+        .header .date-time {
+            background-color: #34d399;
+            padding: 8px 15px;
+            border-radius: 18px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            font-weight: 500;
+        }
+        .header .date-time i {
+            margin-right: 5px;
+        }
+        .sidebar {
+            width: 20%;
+            background: linear-gradient(180deg, #3b82f6, #2563eb);
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            padding-top: 25px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+            z-index: 900;
+        }
+        .sidebar h2 {
+            font-size: 22px;
+            font-weight: 700;
+            text-align: center;
+            margin: 0 0 30px 0;
+            padding: 0 20px;
+            color: #f1f5f9;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+        }
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            color: white;
+            padding: 16px 25px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            margin: 2px 0;
+        }
+        .sidebar a i {
+            margin-right: 15px;
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .sidebar a:hover {
+            background: linear-gradient(90deg, #1e40af, #2563eb);
+            border-left: 4px solid #60a5fa;
+            padding-left: 30px;
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+        .sidebar a:hover i {
+            transform: scale(1.2);
+            color: #60a5fa;
+        }
+        .sidebar a:active {
+            background: linear-gradient(90deg, #1e3a8a, #1e40af);
+            transform: translateX(2px);
+        }
+        .main-content {
+            margin-left: 20%;
+            padding: 90px 30px 30px;
+            background-color: #f5f7fa;
+        }
+        .user-info {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-left: 5px solid #3b82f6;
+        }
+        .profile-photo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .profile-photo img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .profile-photo input[type="file"] {
+            margin-top: 10px;
+        }
+        .profile-details div {
+            margin-bottom: 15px;
+        }
+        .profile-details label {
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-right: 10px;
+        }
+        .profile-details span {
+            color: #4b5563;
+        }
+        .profile-actions a {
+            margin-right: 15px;
+            color: #1e3a8a;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .profile-actions a:hover {
+            color: #2563eb;
+        }
+    </style>
+    <script src="common.js"></script>
+</head>
+<body>
+
+    <div class="main-content">
+        <h3>Admin Profile</h3>
+        <div class="user-info">
+            <div class="profile-photo">
+                <img src="default-profile.jpg" alt="Profile Photo">
+                <input type="file" accept="image/jpeg,image/png" title="Upload Photo">
+                <p>Max size: 2MB (JPG, PNG)</p>
+            </div>
+            <div class="profile-details">
+                <div><label>Full Name</label><span>Super Admin John Doe</span></div>
+                <div><label>Email</label><span>john.doe@example.com</span></div>
+                <div><label>Phone Number</label><span>+91-555-123-4567</span></div>
+                <div><label>Role</label><span>Super Admin</span></div>
+                <div><label>Address</label><span>123 Admin St, Admin City</span></div>
+                <div><label>Account Creation Date</label><span>2023-01-15</span></div>
+                <div><label>Last Login</label><span>07/28/2025, 02:30 PM</span></div>
+                <div><label>Last Password Change</label><span>07/01/2025, 10:00 AM</span></div>
+            </div>
+            <div class="profile-actions">
+                <a href="#">Edit Profile</a>
+                <a href="#">Change Password</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in when page loads
+        window.addEventListener('load', function() {
+            if (localStorage.getItem('isLoggedIn') !== 'true') {
+                // User is not logged in, redirect to login page
+                window.location.href = 'login.html';
+            }
+        });
+		//Backend
+		document.addEventListener('DOMContentLoaded', async () => {
+		    try {
+		        const res = await fetch('/api/admin/profile', {
+		            method: 'GET',
+		            credentials: 'include'
+		        });
+		        const admin = await res.json();
+
+		        // Update your HTML display elements with admin info
+		        document.getElementById('admin-id').textContent = admin.id;
+		        document.getElementById('admin-username').textContent = admin.username;
+		        document.getElementById('admin-email').textContent = admin.email;
+		        document.getElementById('admin-fullname').textContent = admin.fullName;
+		        document.getElementById('admin-phone').textContent = admin.phoneNumber;
+		        document.getElementById('admin-address').textContent = admin.address;
+		        document.getElementById('admin-role').textContent = admin.role;
+		        document.getElementById('admin-createdAt').textContent = admin.createdAt || 'N/A';
+		        document.getElementById('admin-lastLogin').textContent = admin.lastLogin || 'N/A';
+		        document.getElementById('admin-lastPasswordChange').textContent = admin.lastPasswordChange || 'N/A';
+
+		    } catch (err) {
+		        console.error("Error fetching admin profile", err);
+		        window.location.href = 'login.html'; // Session expired or unauthorized
+		    }
+		});
+		</script>
+</body>
+</html>
